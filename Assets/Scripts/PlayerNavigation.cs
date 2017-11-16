@@ -12,7 +12,6 @@ public class PlayerNavigation : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
     }
 
     // Update is called once per frame
@@ -23,11 +22,11 @@ public class PlayerNavigation : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))
+            if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Default")))
             {
+                Debug.Log("Hit: " + hit.collider.name);
                 agent.SetDestination(hit.point);
             }
         }
-
     }
 }
