@@ -31,7 +31,6 @@ public class LifeIndicator : MonoBehaviour {
 
     private void changeColor()
     {
-        Debug.Log(actualDamageInScale);
         if (actualDamageInScale < 0.40)
         {
             gameObject.GetComponent<Renderer>().material.color = Color.green;

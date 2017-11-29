@@ -7,11 +7,13 @@ public class PlayerNavigation : MonoBehaviour
     public float MinDist;
     public float Life;
     public LifeIndicator lifeIndicator;
+    public float damage;
 
     private Animator animator;
     private NavMeshAgent agent;
     private Transform reference;
     private float initialLife;
+    private bool isDead;
 
     // Use this for initialization
     void Start()
@@ -20,26 +22,23 @@ public class PlayerNavigation : MonoBehaviour
         animator = this.GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
-    private float deltaTime;
     void Update()
     {
-
-        deltaTime += Time.deltaTime;
-        if (deltaTime > 1)
+        if(!isDead)
         {
-            deltaTime = 0;
-            decreaseLife(20);
+            animator.SetFloat("Speed", agent.velocity.magnitude);
+            HandleMousInput();
+            FollowAndAttack();
+            CheckIfDead();
         }
+    }
 
-        HandleMousInput();
-        FollowAndAttack();
-        
-
-        animator.SetFloat("Speed", agent.velocity.magnitude);
-
+    private void CheckIfDead()
+    {
         if (Life <= 0)
         {
             animator.SetBool("IsDead", true);
+            Destroy(gameObject, 1f);
         }
     }
 
@@ -55,13 +54,11 @@ public class PlayerNavigation : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Enemy"))
                 {
-                    Debug.Log("Follow enemy!");
                     reference = hit.transform;
                 }
             }
             else if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))
             {
-                Debug.Log("Hit: " + hit.collider.name);
                 agent.SetDestination(hit.point);
                 reference = null;
             }
@@ -85,9 +82,16 @@ public class PlayerNavigation : MonoBehaviour
     {
         if(reference != null)
         {
-            agent.destination = reference.position;
-            if(Vector3.Distance(transform.position, reference.position) <= MinDist)
+            if (Vector3.Distance(transform.position, reference.position) >= MinDist)
             {
+                agent.destination = reference.position;
+                transform.LookAt(reference);
+            }
+            else
+            {
+                agent.destination = transform.localPosition;
+                EnemyController enemy = reference.GetComponent<EnemyController>();
+                enemy.Damage(damage);
                 animator.SetTrigger("Attack");
             }
         }
