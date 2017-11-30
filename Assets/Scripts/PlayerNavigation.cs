@@ -11,7 +11,8 @@ public class PlayerNavigation : MonoBehaviour
 
     private Animator animator;
     private NavMeshAgent agent;
-    private Transform reference;
+    private Transform enemyReference;
+    private Transform destroyableReference;
     private float initialLife;
     private bool isDead;
 
@@ -54,13 +55,18 @@ public class PlayerNavigation : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Enemy"))
                 {
-                    reference = hit.transform;
+                    enemyReference = hit.transform;
+                }
+                else if (hit.transform.gameObject.CompareTag("Destroyable"))
+                {
+                    destroyableReference = hit.transform;
                 }
             }
             else if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))
             {
                 agent.SetDestination(hit.point);
-                reference = null;
+                enemyReference = null;
+                destroyableReference = null;
             }
         }
     }
@@ -77,22 +83,47 @@ public class PlayerNavigation : MonoBehaviour
             lifeIndicator.Dead();
         }
     }
-
+    private float deltaTime;
     private void FollowAndAttack()
     {
-        if(reference != null)
+        if(enemyReference != null)
         {
-            if (Vector3.Distance(transform.position, reference.position) >= MinDist)
+            if (Vector3.Distance(transform.position, enemyReference.position) >= MinDist)
             {
-                agent.destination = reference.position;
-                transform.LookAt(reference);
+                agent.destination = enemyReference.position;
+                transform.LookAt(enemyReference);
             }
             else
             {
                 agent.destination = transform.localPosition;
-                EnemyController enemy = reference.GetComponent<EnemyController>();
-                enemy.Damage(damage);
-                animator.SetTrigger("Attack");
+                EnemyController enemy = enemyReference.GetComponent<EnemyController>();
+                deltaTime += Time.deltaTime;
+                if(deltaTime >= 1)
+                {
+                    animator.SetTrigger("Attack");
+                    enemy.Damage(damage);
+                    deltaTime = 0;
+                }
+            }
+        }
+        else if(destroyableReference != null)
+        {
+            if (Vector3.Distance(transform.position, destroyableReference.position) >= MinDist)
+            {
+                agent.destination = destroyableReference.position;
+                transform.LookAt(destroyableReference);
+            }
+            else
+            {
+                agent.destination = transform.localPosition;
+                Destroyable destroyable = destroyableReference.GetComponent<Destroyable>();
+                deltaTime += Time.deltaTime;
+                if (deltaTime >= 1)
+                {
+                    animator.SetTrigger("Attack");
+                    destroyable.Damage(damage);
+                    deltaTime = 0;
+                }
             }
         }
     }
@@ -100,6 +131,6 @@ public class PlayerNavigation : MonoBehaviour
     public void Damage(float damage)
     {
         decreaseLife(damage);
-        animator.SetTrigger("Damage");
+        //animator.SetTrigger("Damage");
     }
 }

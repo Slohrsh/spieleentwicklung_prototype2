@@ -42,10 +42,10 @@ public class EnemyController : MonoBehaviour {
         {
             isDead = true;
             animator.SetBool("IsDead", isDead);
-            Destroy(gameObject, 1f);
+            Destroy(gameObject, 2f);
         }
     }
-
+    private float deltaTime;
     private void FollowPlayerIfReachable()
     {
         if(player != null)
@@ -59,8 +59,13 @@ public class EnemyController : MonoBehaviour {
             {
                 agent.destination = transform.localPosition;
                 PlayerNavigation nav = player.GetComponent<PlayerNavigation>();
-                nav.Damage(damage);
-                animator.SetTrigger("Attack");
+                deltaTime += Time.deltaTime;
+                if (deltaTime >= 1)
+                {
+                    nav.Damage(damage);
+                    animator.SetTrigger("Attack");
+                    deltaTime = 0;
+                }
             }
         }
     }
