@@ -6,6 +6,8 @@ public class Destroyable : MonoBehaviour {
 
     public Texture2D cursorTexture;
     public float Life;
+    public bool dropsItem;
+    public GameObject dropedItemPrefab;
 
     void Start()
     {
@@ -16,7 +18,14 @@ public class Destroyable : MonoBehaviour {
     {
         if(Life <= 0)
         {
+            if(dropsItem)
+            {
+                GameObject droppedItem;
+                droppedItem = Instantiate(dropedItemPrefab, transform.position, transform.rotation);
+                droppedItem.SetActive(true);
+            }
             Destroy(gameObject);
+            OnMouseExit();
         }
     }
 

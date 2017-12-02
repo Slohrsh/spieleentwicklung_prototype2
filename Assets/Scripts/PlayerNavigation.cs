@@ -16,13 +16,13 @@ public class PlayerNavigation : MonoBehaviour
     private float initialLife;
     private bool isDead;
 
-    // Use this for initialization
     void Start()
     {
         initialLife = Life;
         animator = this.GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
+
     void Update()
     {
         if(!isDead)
@@ -60,6 +60,11 @@ public class PlayerNavigation : MonoBehaviour
                 else if (hit.transform.gameObject.CompareTag("Destroyable"))
                 {
                     destroyableReference = hit.transform;
+                }
+                else if(hit.transform.gameObject.CompareTag("Life"))
+                {
+                    Destroy(hit.transform.gameObject);
+                    Life += 20;
                 }
             }
             else if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))
