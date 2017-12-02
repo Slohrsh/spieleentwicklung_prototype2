@@ -20,7 +20,7 @@ public class LifeIndicator : MonoBehaviour {
     {
         float scaledDamage = damage / initialLife;
         actualDamageInScale += scaledDamage;
-        transform.localScale += new Vector3(-1*scaledDamage, 0, 0);
+        transform.localScale -= new Vector3(scaledDamage, 0, 0);
         changeColor();
     }
 
@@ -43,5 +43,13 @@ public class LifeIndicator : MonoBehaviour {
         {
             gameObject.GetComponent<Renderer>().material.color = Color.yellow;
         }
+    }
+
+    internal void increaseLife(int life, float initialLife)
+    {
+        float scaledDamage = life / initialLife;
+        actualDamageInScale -= scaledDamage;
+        transform.localScale += new Vector3(scaledDamage, 0, 0);
+        changeColor();
     }
 }

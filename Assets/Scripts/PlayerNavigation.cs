@@ -8,6 +8,7 @@ public class PlayerNavigation : MonoBehaviour
     public float Life;
     public LifeIndicator lifeIndicator;
     public float damage;
+    public float destroyabledistance = 20;
 
     private Animator animator;
     private NavMeshAgent agent;
@@ -64,6 +65,7 @@ public class PlayerNavigation : MonoBehaviour
                 else if(hit.transform.gameObject.CompareTag("Life"))
                 {
                     Destroy(hit.transform.gameObject);
+                    lifeIndicator.increaseLife(20, initialLife);
                     Life += 20;
                 }
             }
@@ -113,7 +115,7 @@ public class PlayerNavigation : MonoBehaviour
         }
         else if(destroyableReference != null)
         {
-            if (Vector3.Distance(transform.position, destroyableReference.position) >= MinDist)
+            if (Vector3.Distance(transform.position, destroyableReference.position) >= destroyabledistance)
             {
                 agent.destination = destroyableReference.position;
                 transform.LookAt(destroyableReference);

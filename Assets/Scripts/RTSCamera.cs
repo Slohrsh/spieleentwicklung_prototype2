@@ -16,14 +16,9 @@ public class RTSCamera : MonoBehaviour {
     public int ScrollSpeed = 25;
     public int DragSpeed = 100;
 
-    private Camera camera;
-
-    // Use this for initialization
     void Start () {
-        camera = GetComponentInChildren<Camera>();
     }
 	
-	// Update is called once per frame
 	void Update () {
 
         var translation = Vector3.zero;
@@ -50,18 +45,16 @@ public class RTSCamera : MonoBehaviour {
         var zoomDelta = Input.GetAxis("Mouse ScrollWheel") * ZoomSpeed * Time.deltaTime;
         if (zoomDelta != 0)
         {
-            translation -= Vector3.up * ZoomSpeed * zoomDelta;
+            translation -= transform.up * ZoomSpeed * zoomDelta;
         }
 
-        if (Input.GetMouseButton(2)) // MMB
+        if (Input.GetMouseButton(2))
         {
-            // Hold button and drag camera around
-            translation -= new Vector3(Input.GetAxis("Mouse X") * DragSpeed * Time.deltaTime, 0,
-                               Input.GetAxis("Mouse Y") * DragSpeed * Time.deltaTime);
+            translation -= transform.forward * Input.GetAxis("Mouse Y") * DragSpeed * Time.deltaTime;
+            translation -= transform.right * Input.GetAxis("Mouse X") * DragSpeed * Time.deltaTime;
         }
         else
         {
-            // Move camera if mouse pointer reaches screen borders
             if (Input.mousePosition.x < ScrollArea)
             {
                 translation += transform.right * -ScrollSpeed * Time.deltaTime;
@@ -83,7 +76,7 @@ public class RTSCamera : MonoBehaviour {
             }
         }
 
-        var desiredPosition = camera.transform.position + translation;
+        var desiredPosition = transform.position + translation;
         if (desiredPosition.x < -LevelArea || LevelArea < desiredPosition.x)
         {
             translation.x = 0;
