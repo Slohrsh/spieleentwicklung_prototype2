@@ -18,15 +18,17 @@ public class Endboss : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        float distance = Vector3.Distance(transform.position, player.position);
-        Debug.Log(distance);
-        if (distance <= WaveDist && distance > TauntDist)
+        if(player != null)
         {
-            animator.SetTrigger("Wave");
-        }
-        else if (distance <= TauntDist)
-        {
-            animator.SetTrigger("Taunt");
+            float distance = Vector3.Distance(transform.position, player.position);
+            if (distance <= WaveDist && distance > TauntDist)
+            {
+                animator.SetTrigger("Wave");
+            }
+            else if (distance <= TauntDist)
+            {
+                animator.SetTrigger("Taunt");
+            }
         }
     }
 }

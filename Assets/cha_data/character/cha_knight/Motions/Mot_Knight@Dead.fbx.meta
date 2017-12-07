@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 119550f2b2b0fe748875dc68a648b28c
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: FullBodyIK
     100002: FullBodyIK (2)
@@ -64,12 +64,10 @@ ModelImporter:
     7400000: Dead
     9500000: //RootNode
     11100000: //RootNode
-  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -82,7 +80,6 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -95,7 +92,7 @@ ModelImporter:
       name: Dead
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -9,6 +9,7 @@ public class PlayerNavigation : MonoBehaviour
     public LifeIndicator lifeIndicator;
     public float damage;
     public float destroyabledistance = 20;
+    public GameManager gameManager;
 
     private Animator animator;
     private NavMeshAgent agent;
@@ -32,7 +33,19 @@ public class PlayerNavigation : MonoBehaviour
             HandleMousInput();
             FollowAndAttack();
             CheckIfDead();
+            CheckGround();
         }
+    }
+
+    private void CheckGround()
+    {
+        int waterMask = 1 << NavMesh.GetAreaFromName("Rock");
+        NavMeshHit hit;
+        agent.SamplePathPosition(-1, 0.0f, out hit);
+        if (hit.mask == waterMask)//changed line
+            agent.speed = 3;
+        else
+            agent.speed = 10;
     }
 
     private void CheckIfDead()
@@ -40,8 +53,14 @@ public class PlayerNavigation : MonoBehaviour
         if (Life <= 0)
         {
             animator.SetBool("IsDead", true);
-            Destroy(gameObject, 1f);
+            Destroy(gameObject, 3f);
+            Invoke("GameOver", 3f);
         }
+    }
+
+    private void GameOver()
+    {
+        gameManager.GameOver();
     }
 
     private void HandleMousInput()
