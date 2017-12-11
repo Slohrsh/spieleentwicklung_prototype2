@@ -17,6 +17,8 @@ public class PlayerNavigation : MonoBehaviour
     private Transform destroyableReference;
     private float initialLife;
     private bool isDead;
+    private int key;
+    private bool hasAxe = false;
 
     void Start()
     {
@@ -43,9 +45,13 @@ public class PlayerNavigation : MonoBehaviour
         NavMeshHit hit;
         agent.SamplePathPosition(-1, 0.0f, out hit);
         if (hit.mask == waterMask)//changed line
-            agent.speed = 3;
+            if (hasAxe == false)
+                agent.speed = 3;
+            else
+                agent.speed = 10;
         else
             agent.speed = 10;
+
     }
 
     private void CheckIfDead()
@@ -81,11 +87,29 @@ public class PlayerNavigation : MonoBehaviour
                 {
                     destroyableReference = hit.transform;
                 }
+                else if (hit.transform.gameObject.CompareTag("Destroyable_KeyRequired"))
+                {
+                    if(key <= 1)
+                    {
+                        Destroy(hit.transform.gameObject);
+                        key--;
+                    }
+                }
                 else if(hit.transform.gameObject.CompareTag("Life"))
                 {
                     Destroy(hit.transform.gameObject);
                     lifeIndicator.increaseLife(20, initialLife);
                     Life += 20;
+                }
+                else if (hit.transform.gameObject.CompareTag("Key"))
+                {
+                    Destroy(hit.transform.gameObject);
+                    key++;
+                }
+                else if (hit.transform.gameObject.CompareTag("Axe"))
+                {
+                    Destroy(hit.transform.gameObject);
+                    hasAxe = true;
                 }
             }
             else if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))

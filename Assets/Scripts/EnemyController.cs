@@ -13,6 +13,8 @@ public class EnemyController : MonoBehaviour {
     public float Life;
     public LifeIndicator lifeIndicator;
     public float damage;
+    public bool dropKey;
+    public GameObject dropedKeyPrefab;
 
     private bool isDead = false;
     private Animator animator;
@@ -44,8 +46,21 @@ public class EnemyController : MonoBehaviour {
             animator.SetBool("IsDead", isDead);
             CheckGround();
             Destroy(gameObject, 2f);
+            DropKey();
+            OnMouseExit();
         }
     }
+
+    private void DropKey()
+    {
+        if (dropKey)
+        {
+            GameObject droppedItem;
+            droppedItem = Instantiate(dropedKeyPrefab, transform.position, transform.rotation);
+            droppedItem.SetActive(true);
+        }
+    }
+
     private float deltaTime;
     private void FollowPlayerIfReachable()
     {
@@ -76,10 +91,14 @@ public class EnemyController : MonoBehaviour {
         int rockMask = 1 << NavMesh.GetAreaFromName("Rock");
         NavMeshHit hit;
         agent.SamplePathPosition(-1, 0.0f, out hit);
-        if (hit.mask == rockMask)//changed line
-            hit.
+        if (hit.mask == rockMask)
+        {
+            agent.speed = 3;
+        }
         else
+        {
             agent.speed = 10;
+        }
     }
 
     public void Damage(float damage)

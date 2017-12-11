@@ -7,6 +7,9 @@ TagManager:
   - Life
   - Enemy
   - Destroyable
+  - Key
+  - Destroyable_KeyRequired
+  - Axe
   layers:
   - Default
   - TransparentFX
