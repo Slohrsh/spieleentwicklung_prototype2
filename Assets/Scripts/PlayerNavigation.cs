@@ -17,14 +17,14 @@ public class PlayerNavigation : MonoBehaviour
     private Transform destroyableReference;
     private float initialLife;
     private bool isDead;
-    private int key;
-    private bool hasAxe = false;
+    private Inventory inventory;
 
     void Start()
     {
         initialLife = Life;
         animator = this.GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        inventory = GetComponent<Inventory>();
     }
 
     void Update()
@@ -41,11 +41,11 @@ public class PlayerNavigation : MonoBehaviour
 
     private void CheckGround()
     {
-        int waterMask = 1 << NavMesh.GetAreaFromName("Rock");
+        int rockMask = 1 << NavMesh.GetAreaFromName("Rock");
         NavMeshHit hit;
         agent.SamplePathPosition(-1, 0.0f, out hit);
-        if (hit.mask == waterMask)//changed line
-            if (hasAxe == false)
+        if (hit.mask == rockMask)//changed line
+            if (inventory.HasAxe == false)
                 agent.speed = 3;
             else
                 agent.speed = 10;
@@ -61,6 +61,24 @@ public class PlayerNavigation : MonoBehaviour
             animator.SetBool("IsDead", true);
             Destroy(gameObject, 3f);
             Invoke("GameOver", 3f);
+        }
+    }
+
+    public void Damage(float damage)
+    {
+        decreaseLife(damage);
+    }
+
+    public void decreaseLife(float damage)
+    {
+        if (Life > 0)
+        {
+            Life -= damage;
+            lifeIndicator.decreaseLife(damage, initialLife);
+        }
+        else
+        {
+            lifeIndicator.Dead();
         }
     }
 
@@ -89,27 +107,11 @@ public class PlayerNavigation : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.CompareTag("Destroyable_KeyRequired"))
                 {
-                    if(key <= 1)
+                    if(inventory.HasKey)
                     {
                         Destroy(hit.transform.gameObject);
-                        key--;
+                        inventory.DecreaseItem(Inventory.KEY);
                     }
-                }
-                else if(hit.transform.gameObject.CompareTag("Life"))
-                {
-                    Destroy(hit.transform.gameObject);
-                    lifeIndicator.increaseLife(20, initialLife);
-                    Life += 20;
-                }
-                else if (hit.transform.gameObject.CompareTag("Key"))
-                {
-                    Destroy(hit.transform.gameObject);
-                    key++;
-                }
-                else if (hit.transform.gameObject.CompareTag("Axe"))
-                {
-                    Destroy(hit.transform.gameObject);
-                    hasAxe = true;
                 }
             }
             else if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))
@@ -121,18 +123,6 @@ public class PlayerNavigation : MonoBehaviour
         }
     }
 
-    public void decreaseLife(float damage)
-    {
-        if (Life > 0)
-        {
-            Life -= damage;
-            lifeIndicator.decreaseLife(damage, initialLife);
-        }
-        else
-        {
-            lifeIndicator.Dead();
-        }
-    }
     private float deltaTime;
     private void FollowAndAttack()
     {
@@ -176,11 +166,5 @@ public class PlayerNavigation : MonoBehaviour
                 }
             }
         }
-    }
-
-    public void Damage(float damage)
-    {
-        decreaseLife(damage);
-        //animator.SetTrigger("Damage");
     }
 }

@@ -9,7 +9,16 @@ TagManager:
   - Destroyable
   - Key
   - Destroyable_KeyRequired
-  - Axe
+  - Fire
+  - IceAxe
+  - LifePot
+  - Barrel
+  - Left
+  - Right
+  - Slot1
+  - Slot2
+  - Slot3
+  - Slot4
   layers:
   - Default
   - TransparentFX

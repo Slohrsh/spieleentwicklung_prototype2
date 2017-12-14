@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4524219800185290}
   - component: {fileID: 33795817290731804}
   - component: {fileID: 23493447063785434}
-  - component: {fileID: 95230614051431882}
   - component: {fileID: 64372981482161116}
   - component: {fileID: 114090015244874396}
+  - component: {fileID: 65639976508561134}
   m_Layer: 5
-  m_Name: IceAxe 1
-  m_TagString: Axe
+  m_Name: IceAxe
+  m_TagString: IceAxe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,23 +97,18 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 6f9103aa1189d0c41babfe7d5966d8a5, type: 3}
---- !u!95 &95230614051431882
-Animator:
-  serializedVersion: 3
+--- !u!65 &65639976508561134
+BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1922952950442432}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6f9103aa1189d0c41babfe7d5966d8a5, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  serializedVersion: 2
+  m_Size: {x: 0.45235816, y: 0.03432678, z: 0.20732301}
+  m_Center: {x: 0, y: -0.0000000093132275, z: -0.00000002980233}
 --- !u!114 &114090015244874396
 MonoBehaviour:
   m_ObjectHideFlags: 1
