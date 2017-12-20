@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-    private float radius = 5;
 
 	// Use this for initialization
 	void Start () {

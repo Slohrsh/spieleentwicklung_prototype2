@@ -7,10 +7,11 @@ public class InventoryMenu : MonoBehaviour {
 
     public Inventory inventory;
 
+
     private Button[] buttons;
 	// Use this for initialization
 	void Start () {
-        buttons = GetComponent<Canvas>().GetComponentsInChildren<Button>();
+        buttons = GetComponentsInChildren<Button>();
         foreach(Button button in buttons)
         {
             button.onClick.AddListener(() => onButtonClick(button));
@@ -20,7 +21,11 @@ public class InventoryMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		
+        for(int i = 1; i <= 4 && i <= inventory.Items.Count; i++)
+        {
+            Debug.Log(buttons[i].tag);
+            buttons[i].image = inventory.Items[i].Texture;
+        }
 	}
     
     public void onButtonClick(Button button)

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour {
 
-    public List<Item> items;
+    public List<ItemObject> Items { get; private set; }
 
     public const String LIFEPOT = "LifePot";
     public const String KEY = "Key";
@@ -15,7 +15,18 @@ public class Inventory : MonoBehaviour {
 
     public void Start()
     {
-        
+        Items = new List<ItemObject>();
+    }
+
+    internal bool Add(GameObject gameObject)
+    {
+        ItemObject item = gameObject.GetComponent<ItemObject>();
+        if (item != null)
+        {
+            Items.Add(item);
+            return true;
+        }
+        return false;
     }
 
     public void DecreaseItem(String tag)
@@ -23,18 +34,10 @@ public class Inventory : MonoBehaviour {
         manipulateItem(tag, -1);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(manipulateItem(other.tag, 1))
-        {
-            Destroy(other.gameObject);
-        }
-    }
-
     private bool manipulateItem(String tag, int value)
     {
         bool isItem = false;
-        foreach(Item item in items)
+        foreach(ItemObject item in Items)
         {
             if(item.name.Equals(tag))
             {
@@ -45,4 +48,16 @@ public class Inventory : MonoBehaviour {
         return isItem;
     }
 
+    internal bool HasItem(string tag)
+    {
+        bool hasItem = false;
+        foreach (ItemObject item in Items)
+        {
+            if (item.name.Equals(tag) && item.Amount > 0)
+            {
+                hasItem = true;
+            }
+        }
+        return hasItem;
+    }
 }

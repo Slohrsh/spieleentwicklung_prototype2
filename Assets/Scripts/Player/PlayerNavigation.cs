@@ -45,10 +45,10 @@ public class PlayerNavigation : MonoBehaviour
         NavMeshHit hit;
         agent.SamplePathPosition(-1, 0.0f, out hit);
         if (hit.mask == rockMask)//changed line
-            if (inventory.HasAxe == false)
-                agent.speed = 3;
-            else
+            if (inventory.HasItem(Inventory.ICE_AXE))
                 agent.speed = 10;
+            else
+                agent.speed = 3;
         else
             agent.speed = 10;
 
@@ -61,6 +61,7 @@ public class PlayerNavigation : MonoBehaviour
             animator.SetBool("IsDead", true);
             Destroy(gameObject, 3f);
             Invoke("GameOver", 3f);
+            isDead = true;
         }
     }
 
@@ -107,7 +108,7 @@ public class PlayerNavigation : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.CompareTag("Destroyable_KeyRequired"))
                 {
-                    if(inventory.HasKey)
+                    if(inventory.HasItem(Inventory.KEY))
                     {
                         Destroy(hit.transform.gameObject);
                         inventory.DecreaseItem(Inventory.KEY);
